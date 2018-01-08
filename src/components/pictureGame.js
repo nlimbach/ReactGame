@@ -1,16 +1,44 @@
 import React from "react";
+var _ = require('lodash')
+
 
 
 class Main extends React.Component {
     // Setting the initial state of the Counter component
     state = {
-        count: 0
+        count: 0,
+        totalcount:0
     };
 
     // handleIncrement increases this.state.count by 1
-    handleIncrement = () => {
+    handleIncrement = (url, clicked) => {
         // We always use the setState method to update a component's state
-        this.setState({ count: this.state.count + 1 });
+
+
+        if(!clicked) {
+            this.setState({count: this.state.count + 1});
+        }
+
+        if (clicked === true && this.state.count > this.state.totalcount ){
+            this.setState({totalcount: this.state.count });
+            this.setState({count: 0 });
+        }
+        if (clicked){
+        this.imagearray.map(item => (
+
+            item.clicked = false
+        ))};
+
+        let index = _.findIndex(this.imagearray, {imagesrc: url});
+        console.log(index)
+        console.log(this.imagearray[index].clicked)
+        this.imagearray[index].clicked = true;
+
+        for (let i = this.imagearray.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [this.imagearray[i], this.imagearray[j]] = [this.imagearray[j], this.imagearray[i]];
+        }
+
     };
 
     imagearray = [ {imagesrc: 'https://qph.ec.quoracdn.net/main-qimg-48f394cd9bf6bfa6fe087e1137f26216-c', clicked: false},
@@ -40,7 +68,7 @@ class Main extends React.Component {
                             <li><a href="#">Clicky Game</a></li>
                         </ul>
                         <ul id="nav-mobile" className="right hide-on-med-and-down">
-                            <li><a href="#">Score:   {this.state.count}   |   Top Score: {this.state.count}</a></li>
+                            <li><a href="#">Score:   {this.state.count}   |   Top Score: {this.state.totalcount}</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -49,12 +77,13 @@ class Main extends React.Component {
                     <h5 className="center">Click on any image to get started, but don't click on any more than
                         once!</h5>
                 </div>
-                <div id="images">
+                <div>
 
 
                     {this.imagearray.map(item => (
 
-                        <img src = {item.imagesrc} style={{height: '160px', width:'160px', margin: '25px'}} onClick={this.handleIncrement}/>
+                        <img src = {item.imagesrc} style={{height: '160px', width:'160px', margin: '25px'}} onClick={() => this.handleIncrement(item.imagesrc, item.clicked)}/>
+
                     ))}
                 </div>
 
